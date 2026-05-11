@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playbase Virovitica — Event Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810;
+    --surface: #0f0f1c;
+    --surface2: #161626;
+    --border: rgba(120,80,255,0.15);
+    --border2: rgba(120,80,255,0.3);
+    --purple: #7c3aed;
+    --purple-light: #a78bfa;
+    --neon: #00f5ff;
+    --neon2: #ff0090;
+    --green: #00ff88;
+    --amber: #ffb700;
+    --text: #e8e8ff;
+    --muted: #6b6b9a;
+    --dim: #3a3a5c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Hexagon BG pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(124,58,237,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 80% 90%, rgba(0,245,255,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 24px 20px 60px; }
+
+  /* HEADER */
+  .header { text-align: center; padding: 32px 0 28px; }
+  .logo-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(0,245,255,0.1));
+    border: 1px solid var(--border2);
+    border-radius: 40px;
+    padding: 6px 20px 6px 8px;
+    margin-bottom: 16px;
+  }
+  .logo-dot { width: 28px; height: 28px; border-radius: 50%; background: var(--purple); display: grid; place-items: center; font-size: 14px; }
+  .logo-text { font-size: 12px; font-weight: 500; color: var(--purple-light); letter-spacing: 0.05em; }
+  .header h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(22px, 5vw, 38px);
+    font-weight: 900;
+    background: linear-gradient(135deg, #fff 0%, var(--purple-light) 50%, var(--neon) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .header p { font-size: 14px; color: var(--muted); }
+
+  /* TABS */
+  .tab-bar {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 6px;
+    margin-bottom: 24px;
+  }
+  .tab {
+    flex: 1; min-width: 80px;
+    padding: 8px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 500;
+    border: none; border-radius: 9px;
+    cursor: pointer;
+    background: transparent; color: var(--muted);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); background: var(--surface2); }
+  .tab.active {
+    background: linear-gradient(135deg, var(--purple), #4f1fa8);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(124,58,237,0.4);
+  }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* SECTION LABELS */
+  .slabel {
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--purple-light);
+    margin: 22px 0 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .slabel::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--border2); }
+  .card.featured { border-color: rgba(124,58,237,0.5); }
+  .card.neon-border { border-color: rgba(0,245,255,0.25); }
+  .card.green-border { border-color: rgba(0,255,136,0.25); }
+
+  .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+  .card-title { font-size: 14px; font-weight: 600; color: #fff; line-height: 1.3; }
+  .card-sub { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 600;
+    padding: 3px 9px; border-radius: 20px;
+    white-space: nowrap; flex-shrink: 0;
+    letter-spacing: 0.03em;
+  }
+  .b-purple { background: rgba(124,58,237,0.2); color: var(--purple-light); border: 1px solid rgba(124,58,237,0.3); }
+  .b-green  { background: rgba(0,255,136,0.1); color: var(--green); border: 1px solid rgba(0,255,136,0.3); }
+  .b-amber  { background: rgba(255,183,0,0.1); color: var(--amber); border: 1px solid rgba(255,183,0,0.3); }
+  .b-neon   { background: rgba(0,245,255,0.1); color: var(--neon); border: 1px solid rgba(0,245,255,0.25); }
+  .b-pink   { background: rgba(255,0,144,0.1); color: var(--neon2); border: 1px solid rgba(255,0,144,0.25); }
+
+  /* CONTACTS */
+  .contact-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .chip { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+  .chip b { color: var(--purple-light); font-weight: 500; }
+
+  /* METRICS GRID */
+  .grid2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 14px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 14px; }
+  .metric {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px;
+  }
+  .metric-label { font-size: 10px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.04em; }
+  .metric-val { font-family: 'Orbitron', monospace; font-size: 20px; font-weight: 700; color: #fff; }
+  .metric-note { font-size: 10px; color: var(--dim); margin-top: 3px; }
+
+  /* STEPS */
+  .step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .step-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 1px solid var(--purple);
+    background: rgba(124,58,237,0.15);
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 700; color: var(--purple-light);
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step-text { font-size: 13px; color: #c0c0e0; line-height: 1.6; }
+  .step-text strong { color: #fff; font-weight: 600; }
+
+  /* NOTES */
+  .note-ok   { background: rgba(0,255,136,0.07); border: 1px solid rgba(0,255,136,0.25); border-radius: 8px; padding: 9px 13px; font-size: 12px; color: var(--green); margin-top: 8px; line-height: 1.5; }
+  .note-warn { background: rgba(255,183,0,0.07); border: 1px solid rgba(255,183,0,0.25); border-radius: 8px; padding: 9px 13px; font-size: 12px; color: var(--amber); margin-top: 8px; line-height: 1.5; }
+  .note-info { background: rgba(0,245,255,0.07); border: 1px solid rgba(0,245,255,0.2); border-radius: 8px; padding: 9px 13px; font-size: 12px; color: var(--neon); margin-top: 8px; line-height: 1.5; }
+
+  /* IDEA CARDS */
+  .idea-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .idea-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    position: relative; overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .idea-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .idea-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--neon));
+  }
+  .idea-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 28px; font-weight: 900;
+    color: rgba(124,58,237,0.15);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .idea-title { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 5px; }
+  .idea-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .idea-cost { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; font-size: 10px; font-weight: 600; color: var(--green); background: rgba(0,255,136,0.08); border-radius: 6px; padding: 2px 8px; }
+
+  /* SPONSOR CATEGORY HEADER */
+  .cat-header {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    margin-top: 18px;
+  }
+  .cat-icon { font-size: 18px; }
+  .cat-title { font-size: 13px; font-weight: 600; color: var(--text); }
+  .cat-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* WHAT TO OFFER BOX */
+  .offer-box {
+    background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(0,245,255,0.04));
+    border: 1px solid var(--border2);
+    border-radius: 10px; padding: 12px 14px;
+    font-size: 12px; color: #c0c0e0;
+    line-height: 1.8; margin-top: 8px;
+  }
+  .offer-box strong { color: var(--purple-light); font-weight: 500; }
+
+  /* FOOD LIST */
+  .food-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .food-tag { font-size: 11px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 3px 10px; color: #bbb; }
+
+  /* TIMELINE */
+  .timeline-item {
+    display: flex; gap: 14px; margin-bottom: 4px;
+  }
+  .tl-line { display: flex; flex-direction: column; align-items: center; }
+  .tl-dot { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 700; flex-shrink: 0; }
+  .tl-connector { width: 1px; flex: 1; min-height: 20px; margin: 4px 0; }
+  .tl-content { padding-bottom: 20px; padding-top: 4px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .tl-text { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+  /* PRIORITY BOX */
+  .priority-box {
+    background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(0,245,255,0.06));
+    border: 1px solid var(--border2);
+    border-radius: 12px; padding: 16px;
+    margin-top: 16px;
+  }
+  .priority-title { font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700; color: var(--purple-light); letter-spacing: 0.08em; margin-bottom: 12px; }
+  .priority-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .priority-n { font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700; color: var(--neon); width: 18px; flex-shrink: 0; }
+  .priority-text { font-size: 12px; color: #c0c0e0; line-height: 1.5; }
+  .priority-text b { color: #fff; font-weight: 600; }
+
+  @media (max-width: 600px) {
+    .grid4 { grid-template-columns: repeat(2,1fr); }
+    .tab { font-size: 11px; padding: 7px 8px; }
+  }
+  @media (max-width: 420px) {
+    .grid2, .grid4 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-badge">
+      <div class="logo-dot">🎮</div>
+      <span class="logo-text">PLAYBASE — VIROVITICA EVENT PLAN</span>
+    </div>
+    <h1>GAMING EVENT<br>ORGANIZACIJA</h1>
+    <p>Sve na jednom mjestu. Provjeri, dopuni, šalji vlasniku.</p>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="show('kontakti',this)">📋 Kontakti</button>
+    <button class="tab" onclick="show('hrana',this)">🍕 Hrana & Piće</button>
+    <button class="tab" onclick="show('sponzori',this)">🤝 Sponzori</button>
+    <button class="tab" onclick="show('mediji',this)">📣 Mediji</button>
+    <button class="tab" onclick="show('scenariji',this)">👥 Scenariji</button>
+    <button class="tab" onclick="show('prijedlozi',this)">💡 Prijedlozi</button>
+    <button class="tab" onclick="show('papiri',this)">📄 Papiri</button>
+    <button class="tab" onclick="show('timeline',this)">⏱ Plan</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- KONTAKTI -->
+  <!-- ============================================================ -->
+  <div id="kontakti" class="panel active">
+
+    <p class="slabel">Grad Virovitica — dozvola lokacije</p>
+
+    <div class="card featured">
+      <div class="card-head">
+        <p class="card-title">Obrad Radijevac — komunalno-upravni poslovi</p>
+        <span class="badge b-green">Prioritet #1</span>
+      </div>
+      <p class="card-sub">Odobrenje zauzimanja javnih površina. Ovo je prvi poziv za bilo koji javni prostor. Ljubazan i rezonski tip — pitaj direktno.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/721-023</b></div>
+        <div class="chip">✉️ <b>obrad.radijevac@virovitica.hr</b></div>
+        <div class="chip">📍 Trg kralja Zvonimira 1</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <p class="card-title">Alen Bjelica — pročelnik za društvene djelatnosti</p>
+        <span class="badge b-neon">Opcija</span>
+      </div>
+      <p class="card-sub">Ured za kulturu, sport i djecu. Kontaktiraj ako tražiš formalnu podršku Grada ili suorganizaciju.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/725-600</b></div>
+        <div class="chip">✉️ <b>alen.bjelica@virovitica.hr</b></div>
+      </div>
+    </div>
+
+    <p class="slabel">Turistička zajednica — saveznik za 0€</p>
+
+    <div class="card featured">
+      <div class="card-head">
+        <p class="card-title">Tamara Štefanec — direktorica TZ Virovitica</p>
+        <span class="badge b-green">Ključni kontakt</span>
+      </div>
+      <p class="card-sub">Direktorica TZ aktivno traži sadržaj za grad. Mogu pomoći s infrastrukturom, stolovima, medijima i podjelom na kanalima. Odličan saveznik bez troška.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/721-241</b></div>
+        <div class="chip">📞 <b>033/781-572</b></div>
+        <div class="chip">✉️ <b>ured@tz-virovitica.hr</b></div>
+        <div class="chip">📍 Trg bana J. Jelačića 23 (Dvorac Pejačević)</div>
+      </div>
+    </div>
+
+    <p class="slabel">NK Virovitica — lokacija + struja</p>
+
+    <div class="card">
+      <div class="card-head">
+        <p class="card-title">Krešimir Crvenka — predsjednik NK Virovitica</p>
+        <span class="badge b-amber">Lokacija</span>
+      </div>
+      <p class="card-sub">Parking uz NK stadion dostupan za dogovor. NK ima kantin, struju i ponekad stolove. Zauzvrat: logo na baneru + mention na objavi.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>091/575-9429</b></div>
+        <div class="chip">📞 <b>098/194-1299</b></div>
+        <div class="chip">✉️ <b>nogometni.klub.virovitica@vt.t-com.hr</b></div>
+        <div class="chip">📍 Stanka Vraza 45</div>
+      </div>
+    </div>
+
+    <p class="slabel">DVD Virovitica — stolovi, klupe, šator</p>
+
+    <div class="card">
+      <div class="card-head">
+        <p class="card-title">Mario Pavelić — predsjednik DVD Virovitica</p>
+        <span class="badge b-purple">Oprema gratis</span>
+      </div>
+      <p class="card-sub">DVD posuđuje šatore, stolove i klupe za lokalne evente. Traže logo ili simboličnu donaciju DVD-u.</p>
+      <div class="contact-row">
+        <div class="chip">✉️ <b>mariopavelic45@gmail.com</b></div>
+        <div class="chip">📞 <b>033/722-970</b></div>
+        <div class="chip">✉️ <b>dvd-virovitica@email.t-com.hr</b></div>
+        <div class="chip">📍 Vinkovačka cesta 19A</div>
+      </div>
+    </div>
+
+    <p class="slabel">Mediji — besplatna PR pokrivenost</p>
+
+    <div class="card neon-border">
+      <div class="card-head">
+        <p class="card-title">ICV — Radio 92.9 FM + icv.hr portal + Virovitički list</p>
+        <span class="badge b-neon">Najvažniji medij</span>
+      </div>
+      <p class="card-sub">Najveći lokalni medij u VPŽ. 51.700+ FB pratitelja. Šalji vijest na marketing@icv.hr — objavljuju lokalne evente besplatno.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/740-000</b></div>
+        <div class="chip">✉️ <b>marketing@icv.hr</b></div>
+        <div class="chip">👤 Robert Cenger, direktor</div>
+        <div class="chip">📍 Ferde Rusana 1/9</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Grad Virovitica — pisarnica</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/725-980</b></div>
+        <div class="chip">✉️ <b>grad@virovitica.hr</b></div>
+        <div class="chip">📍 Trg kralja Zvonimira 1</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- HRANA & PIĆE -->
+  <!-- ============================================================ -->
+  <div id="hrana" class="panel">
+
+    <div class="note-info">💡 Cilj: hrana i piće na eventu uz minimalne ili nula troškova. Dogovaraš s lokalnim partnerima — oni daju hranu/piće, ti im daješ vidljivost i prodajnu točku na eventu.</div>
+
+    <p class="slabel">Model suradnje — kako dogovoriti</p>
+    <div class="card featured">
+      <p class="card-title">Kako pristupiti ugostitelju / pekarnici</p>
+      <p class="card-sub">Ne traži donaciju — nudi poslovnu priiku. Reci: <em style="color:#e0e0ff">"Imamo gaming event, očekujemo X posjetitelja, možete postaviti svoju prodajnu točku uz kombij — mi vam dajemo prostor i promociju, vi niste platili ništa."</em> Ugostitelji koji prodaju na eventu zarađuju direktno. Oni koji sponzoriraju doniraju hranu/piće i dobivaju logo/mention.</p>
+    </div>
+
+    <p class="slabel">Preporučene namirnice za gaming event</p>
+    <div class="card">
+      <p class="card-title">Što ide uz gaming publiku (djeca + mladi)</p>
+      <div class="food-list">
+        <span class="food-tag">🍕 Pizza u kriškama</span>
+        <span class="food-tag">🌯 Sendviči / tortilije</span>
+        <span class="food-tag">🍟 Pomfrit/štapići</span>
+        <span class="food-tag">🧃 Sokovi u boci</span>
+        <span class="food-tag">💧 Voda 0,5L</span>
+        <span class="food-tag">🥤 Energetici (14+)</span>
+        <span class="food-tag">🧁 Peciva</span>
+        <span class="food-tag">🍿 Kokice</span>
+        <span class="food-tag">🍫 Čokolada / grickalice</span>
+        <span class="food-tag">🥜 Kikiriki, smoki</span>
+      </div>
+      <p class="card-sub" style="margin-top:10px;">Preporuka: pizza na kriške je hit za gaming — može se jesti jednom rukom. Peciva od pekare za čekanje u redu. Voda i sokovi su standard. Energetici za 14+ ako je turnir.</p>
+    </div>
+
+    <p class="slabel">Lokalni ugostiteljski kontakti — pizza & fast food</p>
+
+    <div class="card">
+      <div class="card-head">
+        <p class="card-title">Pizzeria Šećer</p>
+        <span class="badge b-green">Preporučeno</span>
+      </div>
+      <p class="card-sub">Najpoznatija pizzerija u Virovitici, pizza iz krušne peći. Idealni partner za pizza kriške na eventu. Obiteljska tradicija — lako se dogovori direktno s vlasnikom.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/727-418</b></div>
+        <div class="chip">📍 Matije Gupca 172-174</div>
+        <div class="chip">🔗 facebook.com/pizzeria.secer</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <p class="card-title">Pizzeria 4M</p>
+        <span class="badge b-amber">Opcija</span>
+      </div>
+      <p class="card-sub">Obiteljska pizzerija u centru. Dostava i catering po dogovoru. Traži razgovor s vlasnikom o dostavi na event.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/728-326</b></div>
+        <div class="chip">📍 J.J. Strossmayera 36</div>
+        <div class="chip">🔗 facebook.com/Pizzeria4MVirovitica</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <p class="card-title">Kllopa Fast Food & Catering</p>
+        <span class="badge b-green">Catering opcija</span>
+      </div>
+      <p class="card-sub">Imaju organizirani catering za evente i proslove. Sendviči, hamburgeri, pileće. Direktno kažu: <em style="color:#e0e0ff">"Organiziraš party? Obrati nam se s povjerenjem."</em> — idealni partneri.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/732-130</b></div>
+        <div class="chip">📱 <b>097/625-7181</b></div>
+        <div class="chip">✉️ <b>miselatomaic@gmail.com</b></div>
+        <div class="chip">📍 J.J. Strossmayera 25</div>
+        <div class="chip">🔗 kllopa.com</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <p class="card-title">Wereucha Caffe Bar</p>
+        <span class="badge b-neon">Piće sponzor</span>
+      </div>
+      <p class="card-sub">Mlađi lokal u centru, aktivan na socijalima. Mogli bi sponzorirati piće (sokovi, voda) uz logo na eventu. Dobar fit za gaming estetiku.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>099/396-4644</b></div>
+        <div class="chip">📍 Trg dr. Franje Tuđmana 6</div>
+        <div class="chip">🔗 facebook.com/Wereucha | IG: wereucha</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <p class="card-title">INfinity Bistro & Caffe</p>
+        <span class="badge b-amber">Opcija</span>
+      </div>
+      <p class="card-sub">Moderan bistro, dobar za sendviče i caffe piće. Imaju takeaway i outdoor. Moguća suradnja za pripremu i dostavu na lokaciju.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/500-152</b></div>
+        <div class="chip">✉️ <b>smlforever2020@gmail.com</b></div>
+        <div class="chip">📍 Matije Gupca 56</div>
+        <div class="chip">🔗 IG: bistro_infinity</div>
+      </div>
+    </div>
+
+    <p class="slabel">Pekare — grickalice i peciva za čekanje</p>
+
+    <div class="card">
+      <div class="card-head">
+        <p class="card-title">Lokalne pekare (KTC pekara, pekara u centru)</p>
+        <span class="badge b-purple">Najjeftinija opcija</span>
+      </div>
+      <p class="card-sub">Dogovori 50-100 komada svježih peciva ujutro na dan eventa — cijena je minimalna (po dogovoru ili u zamjenu za logo). Krafne, simit, kifli — savršeno za mlađe posjetitelje koji čekaju na red.</p>
+      <div class="contact-row">
+        <div class="chip">📍 Posjeti direktno ujutro i dogovori. Traži vlasnika, ne prodavačicu.</div>
+      </div>
+    </div>
+
+    <p class="slabel">Strategija za 0€ na hrani i piću</p>
+    <div class="offer-box">
+      <strong>Model A — Sponzor hrane:</strong> Ugostitelj donira hranu (pizza, sendviči, piće) u zamjenu za logo na baneru, mention u svim FB objavama i Instagram story na dan eventa. Trošak za tebe: 0€.<br><br>
+      <strong>Model B — Pop-up stand:</strong> Ugostitelju daš prostor i struju (ako ima), oni sami prodaju na eventu i zadržavaju zarada. Trošak za tebe: 0€. Dobit: tvoji posjetitelji imaju hranu i piće, ugostitelj je motiviran da dođe jer zaradit će.<br><br>
+      <strong>Model C — Naručuješ ti:</strong> Naručiš 50-100 kriški pizze / 50 sendviča i uračunaš u cijenu ulaznice (15€ = ulaz + jedan obrok). Prihod od 30 igrača = 450€ — od toga 60-80€ za hranu, ostatak profit.
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SPONZORI -->
+  <!-- ============================================================ -->
+  <div id="sponzori" class="panel">
+
+    <div class="note-info">💡 Sponzorstvo ne mora biti novac. Nude opremu, hranu, prostor ili medijsku vidljivost u zamjenu za brand placement na eventu.</div>
+
+    <p class="slabel">Što nudiš sponzorima — paket</p>
+    <div class="card featured">
+      <p class="card-title">Sponzorski paket — što dobiješ, što oni dobivaju</p>
+      <div class="offer-box" style="margin-top:10px;">
+        <strong>Ti nudiš sponzoru:</strong><br>
+        • Logo na baneru / plakatu (fizički i digitalni)<br>
+        • Mention u svim FB i IG objavama (#sponzor)<br>
+        • Story tag na Playbase profilu na dan eventa<br>
+        • Verbalni mention na eventu (MC ili voditelj)<br>
+        • Pop-up stand prostor (za ugostiteljske partnere)<br>
+        • Zahvalnica/certifikat lokalni partner (za ozbiljnije)<br><br>
+        <strong>Oni tebi daju:</strong><br>
+        • Hranu / piće / grickalice (ugostitelji)<br>
+        • Stolove i klupe (DVD, MO, ugostiteljski terasa)<br>
+        • Nagrade za pobjednike turnira (tech shopovi, tiskare)<br>
+        • Printanje plakata (tiskarnice, copy centri)<br>
+        • Poklon boni / voucher za nagrade (frizerski, sportski)
+      </div>
+    </div>
+
+    <div class="cat-header">
+      <div class="cat-icon">🍕</div>
+      <div>
+        <p class="cat-title">Hrana & Piće sponzori</p>
+        <p class="cat-sub">Nude hranu ili piće, dobivaju logo + prodajni prostor</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><p class="card-title">Pizzeria Šećer</p><span class="badge b-green">Prioritet</span></div>
+      <p class="card-sub">Pizza kriške kao nagrada / hrana za posjetitelje. Klasičan lokalni brend s prepoznatljivošću.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/727-418</b></div>
+        <div class="chip">📍 Mat. Gupca 174</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><p class="card-title">Kllopa Fast Food & Catering</p><span class="badge b-green">Catering partner</span></div>
+      <p class="card-sub">Eksplicitno nude catering za evente. Idealni za sendviče i brzu hranu na eventu.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/732-130</b></div>
+        <div class="chip">✉️ <b>miselatomaic@gmail.com</b></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><p class="card-title">Wereucha Caffe Bar</p><span class="badge b-neon">Piće sponzor</span></div>
+      <p class="card-sub">Mlad lokal, aktivan na IG. Sokovi, voda, energy drinkovi za posjetitelje. Odličan fit s gaming imidžom.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>099/396-4644</b></div>
+        <div class="chip">📍 Trg F. Tuđmana 6</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><p class="card-title">INfinity Bistro & Caffe</p><span class="badge b-amber">Alternativa</span></div>
+      <p class="card-sub">Sendviči, caffe, outdoor dostava. Mogu sponzorirati kavu/topli napitak za organizatore ili VIP goste.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/500-152</b></div>
+        <div class="chip">✉️ <b>smlforever2020@gmail.com</b></div>
+      </div>
+    </div>
+
+    <div class="cat-header" style="margin-top:20px;">
+      <div class="cat-icon">🏛️</div>
+      <div>
+        <p class="cat-title">Infrastrukturni sponzori</p>
+        <p class="cat-sub">Stolovi, klupe, šator, struja, lokacija</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><p class="card-title">DVD Virovitica — Mario Pavelić</p><span class="badge b-green">Šator + stolovi</span></div>
+      <p class="card-sub">Imaju šatore, stolove i klupe za posuđivanje. Idealni sponzor infrastrukture.</p>
+      <div class="contact-row">
+        <div class="chip">✉️ <b>mariopavelic45@gmail.com</b></div>
+        <div class="chip">📞 <b>033/722-970</b></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><p class="card-title">NK Virovitica — Krešimir Crvenka</p><span class="badge b-amber">Lokacija + struja</span></div>
+      <p class="card-sub">Parking, struja i kantin. Zauzvrat logo i mention.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>091/575-9429</b></div>
+        <div class="chip">✉️ <b>nogometni.klub.virovitica@vt.t-com.hr</b></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><p class="card-title">Turistička zajednica — Tamara Štefanec</p><span class="badge b-neon">Mediji + infra</span></div>
+      <p class="card-sub">Mogu sponzorirati infrastrukturu i medijsku pokrivenost u sklopu gradskih programa.</p>
+      <div class="contact-row">
+        <div class="chip">📞 <b>033/721-241</b></div>
+        <div class="chip">✉️ <b>ured@tz-virovitica.hr</b></div>
+      </div>
+    </div>
+
+    <div class="cat-header" style="margin-top:20px;">
+      <div class="cat-icon">🏆</div>
+      <div>
+        <p class="cat-title">Nagrade za pobjednike</p>
+        <p class="cat-sub">Tech shopovi, sportske prodavaonice, tiskare</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Lokalne tech / gaming prodavaonice</p>
+      <p class="card-sub">Kontaktiraj lokalne computer / tech prodavaonice u Virovitici — traži gaming miša, slušalice, kontroler ili gaming kupon kao nagradu za pobjednika turnira. Zauzvrat: logo na svim materijalima + mention. Lako dogovoriti jer im je direktna publika gaming target.</p>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Lokalne tiskare / copy centri</p>
+      <p class="card-sub">Sponzorsko printanje plakata i banera u zamjenu za logo na tiskanom materijalu. Gotovo uvijek pristanu jer je to i reklama za njihove usluge.</p>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MEDIJI -->
+  <!-- ============================================================ -->
+  <div id="mediji" class="panel">
+
+    <p class="slabel">Facebook — besplatno, najveći reach</p>
+
+    <div class="card featured">
+      <div class="card-head"><p class="card-title">ICV Virovitica (FB stranica)</p><span class="badge b-green">51.700 pratitelja</span></div>
+      <p class="card-sub">Pošalji vijest na marketing@icv.hr — besplatno objavljuju lokalne evente. Pokriva i radio i portal.</p>
+    </div>
+    <div class="card">
+      <div class="card-head"><p class="card-title">Oglasnik Virovitica (FB grupa)</p><span class="badge b-green">Najveća lokalna grupa</span></div>
+      <p class="card-sub">Objavi event kao najava. Direktan reach do roditelja i lokalnog stanovništva.<br><b style="color:#a78bfa;">🔗 facebook.com/groups/oglasnikvirovitica</b></p>
+    </div>
+    <div class="card">
+      <div class="card-head"><p class="card-title">Buvljak Virovitica (FB grupa)</p><span class="badge b-amber">Aktivna</span></div>
+      <p class="card-sub">Kupoprodajna grupa — puno lokalnih roditelja. Besplatna objava.<br><b style="color:#a78bfa;">🔗 facebook.com/groups/806539619441379</b></p>
+    </div>
+    <div class="card">
+      <div class="card-head"><p class="card-title">Virovitica.net (portal + FB)</p><span class="badge b-neon">8.700 pratitelja</span></div>
+      <p class="card-sub">Neovisni portal. Šalji vijest — objavljuju lokalne evente besplatno.</p>
+    </div>
+
+    <p class="slabel">Škole — direktan reach djece 6-15 god</p>
+    <div class="card neon-border">
+      <div class="card-head"><p class="card-title">OŠ Vladimir Nazor + OŠ Ivane Brlić-Mažuranić</p><span class="badge b-green">Prioritet za djecu</span></div>
+      <p class="card-sub">Kontaktiraj ravnatelje — traži obavijest roditeljima putem e-Dnevnika ili WhatsApp razrednih grupa. Besplatno i ekstremno učinkovito za ciljnu skupinu 6-14 god. Ponudi besplatnu kratku prezentaciju u školi tjedan dana prije eventa.</p>
+    </div>
+    <div class="card">
+      <p class="card-title">Srednja škola / Tehnička škola Virovitica</p>
+      <p class="card-sub">Za 15-20 god. Plakati na oglasnoj ploči = besplatno. Kontaktiraj pedagoga ili ravnatelja.</p>
+    </div>
+
+    <p class="slabel">Radio + ostalo</p>
+    <div class="card">
+      <div class="card-head"><p class="card-title">ICV Radio 92.9 FM — mali oglasi</p><span class="badge b-amber">Pon-Pet 11:00-11:30</span></div>
+      <p class="card-sub">Pokriva cijelu VPŽ — idealno za privući ljude iz Pitomače, Slatine, Čađavice i okolice. Simbolična cijena. marketing@icv.hr</p>
+    </div>
+    <div class="card">
+      <div class="card-head"><p class="card-title">Instagram + lokalni kreatori</p><span class="badge b-purple">13-30 god</span></div>
+      <p class="card-sub">Playbase IG profil + lokalni IG kreatori koji pokrivaju Viroviticu. Story share = besplatno uz mention ili besplatnu sesiju u kombiju.</p>
+    </div>
+
+    <div class="priority-box">
+      <p class="priority-title">⚡ STRATEGIJA REACH DO MAX ZA 0€</p>
+      <div class="priority-item"><span class="priority-n">01</span><p class="priority-text"><b>Odmah:</b> Objava na Oglasnik + Buvljak FB grupi</p></div>
+      <div class="priority-item"><span class="priority-n">02</span><p class="priority-text"><b>Isti dan:</b> Vijest ICV-u na marketing@icv.hr</p></div>
+      <div class="priority-item"><span class="priority-n">03</span><p class="priority-text"><b>Tjedan ranije:</b> Kontaktiraj ravnatelje OŠ za WhatsApp/e-Dnevnik distribuciju</p></div>
+      <div class="priority-item"><span class="priority-n">04</span><p class="priority-text"><b>Playbase IG:</b> Story + Reel objava uz lokaciju i datum</p></div>
+      <div class="priority-item"><span class="priority-n">05</span><p class="priority-text"><b>TZ Virovitica:</b> Zamoli za repost na njihovim kanalima</p></div>
+      <div class="priority-item"><span class="priority-n">06</span><p class="priority-text"><b>Fizički:</b> Plakati A3 na OŠ, SŠ, NK, caffe barovi, pekare (print ~10-20€)</p></div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SCENARIJI -->
+  <!-- ============================================================ -->
+  <div id="scenariji" class="panel">
+
+    <p class="slabel">Scenarij A — 30 posjetitelja (realistični start)</p>
+    <div class="grid4">
+      <div class="metric"><p class="metric-label">Prihod</p><p class="metric-val">450€</p><p class="metric-note">30 × 15€</p></div>
+      <div class="metric"><p class="metric-label">Rundi kombija</p><p class="metric-val">~5</p><p class="metric-note">6 igrača/blok</p></div>
+      <div class="metric"><p class="metric-label">Trajanje</p><p class="metric-val">4-5h</p><p class="metric-note">bez stresa</p></div>
+      <div class="metric"><p class="metric-label">Trošak</p><p class="metric-val">0€</p><p class="metric-note">besplatna lok.</p></div>
+    </div>
+    <div class="card">
+      <p class="card-title">Što treba za 30 ljudi</p>
+      <p class="card-sub">Kombij + 1 pomoćnik za red. Bez šatora. Objava na 2-3 FB grupe. Lokacija: NK parking ili školsko dvorište. Papiri: samo pismena suglasnost vlasnika lokacije. Hrana: 20-30 kriški pizze (dogovor s Pizzerijom Šećer).</p>
+    </div>
+    <div class="note-ok">✓ Ovaj scenarij je moguć za 0€ troškova ako je lokacija besplatna i kombij dolazi u Viroviticu.</div>
+
+    <p class="slabel">Scenarij B — 100 posjetitelja (uz malo promocije)</p>
+    <div class="grid4">
+      <div class="metric"><p class="metric-label">Prihod</p><p class="metric-val">1500€</p><p class="metric-note">100 × 15€</p></div>
+      <div class="metric"><p class="metric-label">Rundi kombija</p><p class="metric-val">~17</p><p class="metric-note">6 igrača/blok</p></div>
+      <div class="metric"><p class="metric-label">Trajanje</p><p class="metric-val">6-8h</p><p class="metric-note">cijeli dan</p></div>
+      <div class="metric"><p class="metric-label">Infra</p><p class="metric-val">Srednja</p><p class="metric-note">šator, stolovi</p></div>
+    </div>
+    <div class="card">
+      <p class="card-title">Što treba za 100 ljudi</p>
+      <p class="card-sub">Kombij + šator (DVD posudba) + stolovi/klupe + 2-3 pomoćnika + Kllopa ili pizza stand za hranu + online rezervacija termina. Objave 2 tjedna ranije na svim kanalima + OŠ obavijest.</p>
+    </div>
+    <div class="note-warn">⚠ Za 100 ljudi na javnoj površini treba formalna prijava Gradu (Obrad Radijevac). Rok: 15+ dana unaprijed.</div>
+
+    <p class="slabel">Scenarij C — 150 posjetitelja (ambiciozni)</p>
+    <div class="grid4">
+      <div class="metric"><p class="metric-label">Prihod</p><p class="metric-val">2250€</p><p class="metric-note">150 × 15€</p></div>
+      <div class="metric"><p class="metric-label">Trajanje</p><p class="metric-val">8-10h</p><p class="metric-note">ili 2 dana</p></div>
+      <div class="metric"><p class="metric-label">Org. složenost</p><p class="metric-val">Visoka</p><p class="metric-note">registracije, red</p></div>
+      <div class="metric"><p class="metric-label">Lok. preporuka</p><p class="metric-val">Viroexpo</p><p class="metric-note">ili Gradski park</p></div>
+    </div>
+    <div class="card">
+      <p class="card-title">Što treba za 150 ljudi</p>
+      <p class="card-sub">Online prijave obavezne. Šator ili natkriveni prostor. TZ kao suorganizator. Radio ICV oglas. 3+ sponzora za hranu/piće. Turnirski format s rasporedom termina. Kemijski WC ako nema sanitarnog čvora na lokaciji. Razmotri 2-dnevni format da se rastereti kombij.</p>
+    </div>
+    <div class="note-warn">⚠ Za 150 ljudi gotovo sigurno: formalna dozvola Grada, kemijski WC, pojačana organizacija. 2-dnevni format = manje gužve, više prihoda.</div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PRIJEDLOZI -->
+  <!-- ============================================================ -->
+  <div id="prijedlozi" class="panel">
+
+    <div class="note-info">💡 10 konkretnih prijedloga za pop-up standove, rasvjetu, glazbu i gaming atmosferu — sve bez velikih troškova.</div>
+
+    <p class="slabel">10 ideja za gaming event atmosferu</p>
+
+    <div class="idea-grid">
+
+      <div class="idea-card">
+        <div class="idea-num">01</div>
+        <p class="idea-title">🎮 Gaming Photo Booth</p>
+        <p class="idea-desc">Postavi kutić s gaming kontrolerima, gamer stolicom i LED trakama u boji. Djeca/mladi se fotografiraju i dijele na IG = besplatna reklama. Rekviziti: 1 gaming stolica (posudba), LED traka (5-10€), printani "PLAYBASE" natpis.</p>
+        <div class="idea-cost">💚 Trošak: 5-10€</div>
+      </div>
+
+      <div class="idea-card">
+        <div class="idea-num">02</div>
+        <p class="idea-title">🏆 Leaderboard tabla — živa bodovna lista</p>
+        <p class="idea-desc">Veliki whiteboard ili printani plakat s imenima igrača i bodovima. Netko ažurira ručno ili markerom. Stvara napetost i natjecanje. Posjetitelji se vraćaju provjeriti rezultate. Trošak: 0€ (whiteboard posudba od škole) ili 3€ za foam board.</p>
+        <div class="idea-cost">💚 Trošak: 0-3€</div>
+      </div>
+
+      <div class="idea-card">
+        <div class="idea-num">03</div>
+        <p class="idea-title">💡 LED / neon rasvjeta vani</p>
+        <p class="idea-desc">Jeftine RGB LED trake (Amazon/Aliexpress) postavljene oko ulaza kombija ili šatora. Noćna atmosfera je apsolutni game-changer za fotografije i viralnost. Kombinacija zelena + plava + magenta = Playbase boje. Baterijske verzije = nema potrebe za strujom.</p>
+        <div class="idea-cost">💚 Trošak: 10-25€</div>
+      </div>
+
+      <div class="idea-card">
+        <div class="idea-num">04</div>
+        <p class="idea-title">🎵 Gaming Playlist — Spotify besplatno</p>
+        <p class="idea-desc">Pripremi Spotify gaming playlistu (Fortnite OST, FIFA soundtrack, lo-fi gaming, EDM gaming). Pusti kroz Bluetooth zvučnik (ili kombij zvuk). Ne treba DJ, ne treba dozvola za neamplificiranu glazbu. Atmosfera = instant gaming vibe. Zvučnik: posudba ili 0€.</p>
+        <div class="idea-cost">💚 Trošak: 0€</div>
+      </div>
+
+      <div class="idea-card">
+        <div class="idea-num">05</div>
+        <p class="idea-title">🎯 Mini turnir s nagradama</p>
+        <p class="idea-desc">FIFA 1v1 ili Fortnite knockout turnir. Kotizacija = ulaz. Pobjednik dobiva simboličnu nagradu (gaming miš, slušalice, voucher od lokalnog sponzora, Playbase besplatna sesija). Turnirski format drži ljude satima — oni koji izgube gledaju, navijaju, čekaju na rematč.</p>
+        <div class="idea-cost">💚 Trošak: nagrada od sponzora = 0€</div>
+      </div>
+
+      <div class="idea-card">
+        <div class="idea-num">06</div>
+        <p class="idea-title">📸 Live Instagram Wall</p>
+        <p class="idea-desc">Postavi printani A1 plakat s QR kodom koji vodi na Playbase IG profil + hashtag eventa (npr. #PlaybaseVirovitica). Tko objavi story s hashtagom — dobiva popust na sljedeću sesiju. Viralni potencijal je ogroman. Print plakata: 3-5€.</p>
+        <div class="idea-cost">💚 Trošak: 3-5€</div>
+      </div>
+
+      <div class="idea-card">
+        <div class="idea-num">07</div>
+        <p class="idea-title">🕹️ Retro gaming kutak</p>
+        <p class="idea-desc">Pored kombija postavi stol s retro konzolom (GameBoy, stari joystick, ili čak printane kvizove "Prepoznaj igru"). Za najmlađe koji čekaju na red u kombij. Nostalgia faktor privlači i roditelje. Konzola = posudba od prijatelja/kolega.</p>
+        <div class="idea-cost">💚 Trošak: 0€ (posudba)</div>
+      </div>
+
+      <div class="idea-card">
+        <div class="idea-num">08</div>
+        <p class="idea-title">🎪 Gaming Quiz stand</p>
+        <p class="idea-desc">Pop-up kviz štand — tko točno odgovori na gaming pitanje, dobiva grickalice ili ulaz u kombij bez čekanja. Pitanja: "Koja godina je izašao Minecraft?" / "Koliko ima igrača u Fortnite?" Vodi jedna osoba s listom pitanja. Nema troška, maksimalan engagement.</p>
+        <div class="idea-cost">💚 Trošak: 0€</div>
+      </div>
+
+      <div class="idea-card">
+        <div class="idea-num">09</div>
+        <p class="idea-title">🖨️ Gaming plakati i vektori po gradu</p>
+        <p class="idea-desc">Print 20-30 plakata A3 u Playbase vizualima (tamno/neon stil). Postavi na OŠ, SŠ, NK, kafići, pekara, Viroexpo. Za maksimalan učinak: plakati idu 10-14 dana prije eventa. Tiskar u gradu može sponzorirati print u zamjenu za logo. Alternativa: sam printaj u copy centru (0,30-0,50€/kom).</p>
+        <div class="idea-cost">💚 Trošak: 6-15€ (ili 0€ sponzor)</div>
+      </div>
+
+      <div class="idea-card">
+        <div class="idea-num">10</div>
+        <p class="idea-title">🏅 Playbase "Gaming Badge" nagrade</p>
+        <p class="idea-desc">Svaki igrač koji prođe sesiju dobiva mali printani certifikat/kartica "PLAYBASE Virovitica 2025 — Official Player". Djeca to obožavaju, roditelji fotografiraju. Na kartici: Playbase logo + datum eventa + ime igrača (pišeš markerom). Print 50 kartica = 2-3€. Viral momenti zajamčeni.</p>
+        <div class="idea-cost">💚 Trošak: 2-3€</div>
+      </div>
+
+    </div>
+
+    <p class="slabel">Bonus — atmosferski detalji koji ništa ne koštaju</p>
+    <div class="card">
+      <p class="card-sub" style="line-height:2;">
+        🎮 <strong style="color:#fff">Dress code prijedlog za voditelje:</strong> Crne majice s Playbase logom = profesionalni izgled<br>
+        📢 <strong style="color:#fff">MC / voditelj:</strong> Netko tko komentira turnir uživo — djeca to obožavaju, stvara stadionsku atmosferu<br>
+        🌙 <strong style="color:#fff">Vikend navečer = bolji vibe:</strong> LED rasvjeta noću je spektakularnija — planiraj event u poslijepodnevnim satima<br>
+        📱 <strong style="color:#fff">Live story cijeli dan:</strong> Netko kontinuirano snima i objavljuje na IG = raste reach organski<br>
+        🎁 <strong style="color:#fff">Sretan pobjednik:</strong> Fotografija pobjednika u kombiju s trofejom/nagradom = savršen sadržaj za kasniji post
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PAPIRI -->
+  <!-- ============================================================ -->
+  <div id="papiri" class="panel">
+
+    <p class="slabel">Na privatnoj lokaciji — minimum papirologije</p>
+    <div class="card featured">
+      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Pismena suglasnost vlasnika lokacije</strong> — ravnatelj škole, predsjednik NK ili DVD. Jedna stranica A4, potpis i pečat. Nema Grada, nema troška.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Struja</strong> — produžni kabel s vlasnikovog priključka. Provjeri amperažu s Playbaseom.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Kotizacija</strong> — ako si obrt/d.o.o.: mobilni POS. Konzultiraj računovođu za fiskalizacijske obveze.</div></div>
+    </div>
+    <div class="note-ok">✓ Privatna lokacija = minimum papirologije. Idealno za prvi event.</div>
+
+    <p class="slabel">Na javnoj površini</p>
+    <div class="card">
+      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Zahtjev za zauzimanje javne površine</strong> — Obrad Radijevac, 033/721-023. Rok: min 15 dana unaprijed.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Prijava javnog skupa (100+ osoba)</strong> — potencijalno policija VPŽ. Za 30-50 uglavnom ne treba.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Zvuk</strong> — bez vanjskog razglasa = bez posebnih dozvola. Unutarnji zvuk kombija = OK.</div></div>
+    </div>
+    <div class="note-warn">⚠ Naknada za javnu površinu može biti 0-50€. Pitaj pri prvom pozivu.</div>
+
+    <p class="slabel">Što ne trebaš</p>
+    <div class="card">
+      <p class="card-sub" style="line-height:2;">
+        ✗ HAKOM dozvola za zvuk — kombij nema vanjski razglas<br>
+        ✗ Posebna dozvola za hranu — ako partneri sami prodaju (pop-up stand model)<br>
+        ✗ Sigurnosna služba — za do ~100 osoba bez alkohola nije zakonski obavezna<br>
+        ✗ Posebno osiguranje — provjeri je li Playbase već pokriven
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TIMELINE -->
+  <!-- ============================================================ -->
+  <div id="timeline" class="panel">
+
+    <p class="slabel">4 tjedna do eventa</p>
+
+    <div class="timeline-item">
+      <div class="tl-line">
+        <div class="tl-dot" style="background:rgba(0,245,255,0.15);border:1px solid var(--neon);color:var(--neon);">T-4</div>
+        <div class="tl-connector" style="background:linear-gradient(to bottom, var(--neon), var(--purple));opacity:0.3;"></div>
+      </div>
+      <div class="tl-content">
+        <p class="tl-title">Tjedan 4 — odmah</p>
+        <p class="tl-text">📍 Odaberi lokaciju. Nazovi Obrada Radijevca (komunalno) ili ravnatelja škole/NK. Dogovori datum i pismenu suglasnost. Javi Playbaseu za potvrdu dolaska i provjeru struje. Nazovi Tamaru Štefanec (TZ) — pitaj za suradnju.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-line">
+        <div class="tl-dot" style="background:rgba(124,58,237,0.2);border:1px solid var(--purple);color:var(--purple-light);">T-3</div>
+        <div class="tl-connector" style="background:linear-gradient(to bottom, var(--purple), var(--neon2));opacity:0.3;"></div>
+      </div>
+      <div class="tl-content">
+        <p class="tl-title">Tjedan 3 — sponzori + mediji</p>
+        <p class="tl-text">🤝 Nazovi Marija Pavelića (DVD) za stolove i šator. Kontaktiraj Pizzeriju Šećer i Kllopu za hranu/catering dogovor. Kontaktiraj Wereucha za piće. Pošalji vijest ICV-u (marketing@icv.hr). Objavi na FB grupama (Oglasnik, Buvljak, Virovitica.net).</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-line">
+        <div class="tl-dot" style="background:rgba(255,0,144,0.15);border:1px solid var(--neon2);color:var(--neon2);">T-2</div>
+        <div class="tl-connector" style="background:linear-gradient(to bottom, var(--neon2), var(--amber));opacity:0.3;"></div>
+      </div>
+      <div class="tl-content">
+        <p class="tl-title">Tjedan 2 — promocija u punom gasu</p>
+        <p class="tl-text">🏫 Kontaktiraj ravnatelje OŠ za distribuciju obavijesti roditeljima. Postavi plakate A3 (škole, NK, kafići, pekare). Playbase IG story i Reel objava. Pripremi turnirski raspored i foto booth. Potvrdi sve sponzore.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-line">
+        <div class="tl-dot" style="background:rgba(255,183,0,0.15);border:1px solid var(--amber);color:var(--amber);">T-1</div>
+        <div class="tl-connector" style="background:linear-gradient(to bottom, var(--amber), var(--green));opacity:0.3;"></div>
+      </div>
+      <div class="tl-content">
+        <p class="tl-title">Tjedan 1 — finalna priprema</p>
+        <p class="tl-text">📋 Reminder objava svih kanala. Pripremi raspored termina kombija (30-45 min/blok). Gaming playlist na Spotifyu. Pripremi leaderboard tablicu i foto booth. Potvrdi helpers (2-3 osobe). Provjeri je li struja osigurana.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="tl-line">
+        <div class="tl-dot" style="background:rgba(0,255,136,0.15);border:1px solid var(--green);color:var(--green);font-size:7px;">DAN</div>
+      </div>
+      <div class="tl-content">
+        <p class="tl-title">Dan eventa — game on</p>
+        <p class="tl-text">🎮 Dolazak 1h ranije. Kombij parkiran i testiran. LED rasvjeta postavljena. Šator i stolovi postavljeni. Gaming playlist pušta. Leaderboard spreman. Naplatnica aktivna. Live story na Playbase IG cijeli dan. Fotografi i snimatelji u akciji za post-event sadržaj.</p>
+      </div>
+    </div>
+
+    <div class="priority-box">
+      <p class="priority-title">⚡ REDOSLJED PRVIH 48 SATI — ODMAH</p>
+      <div class="priority-item"><span class="priority-n">01</span><p class="priority-text"><b>Obrad Radijevac</b> — 033/721-023 — potvrdi lokaciju</p></div>
+      <div class="priority-item"><span class="priority-n">02</span><p class="priority-text"><b>Tamara Štefanec</b> — 033/721-241 — TZ suradnja</p></div>
+      <div class="priority-item"><span class="priority-n">03</span><p class="priority-text"><b>Mario Pavelić</b> — mariopavelic45@gmail.com — stolovi i šator</p></div>
+      <div class="priority-item"><span class="priority-n">04</span><p class="priority-text"><b>Pizzeria Šećer</b> — 033/727-418 — pizza dogovor</p></div>
+      <div class="priority-item"><span class="priority-n">05</span><p class="priority-text"><b>Kllopa catering</b> — 033/732-130 — catering partner</p></div>
+      <div class="priority-item"><span class="priority-n">06</span><p class="priority-text"><b>ICV marketing</b> — marketing@icv.hr — pošalji vijest</p></div>
+      <div class="priority-item"><span class="priority-n">07</span><p class="priority-text"><b>Wereucha</b> — 099/396-4644 — piće sponzor</p></div>
+      <div class="priority-item"><span class="priority-n">08</span><p class="priority-text"><b>Ravnatelji OŠ</b> — traži obavijest roditeljima</p></div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
